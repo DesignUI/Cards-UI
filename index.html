@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Cards-UI by afollestad</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Cards-UI</h1>
+          <h2>A library that allows you to easily mimic Google Play&#39;s card layout on Android.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/afollestad/Cards-UI/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/afollestad/Cards-UI/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/afollestad/Cards-UI" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Welcome</h1>
+
+<p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/CardsUIThemes.png" alt="DeviceFrames"></p>
+
+<p>Before you can get Cards-UI integrated with your project, you will need one dependency that needs to be referenced as an Android Library Project from Cards-UI (a library module in IntelliJ IDEA or Android Studio):</p>
+
+<ol>
+<li>
+<strong>Silk</strong> (<a href="http://github.com/afollestad/Silk">http://github.com/afollestad/Silk</a>)</li>
+</ol><h1>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h1>
+
+<p>Cards-UI consists of two main classes, <code>CardListView</code> and <code>CardAdapter</code>. </p>
+
+<ol>
+<li>
+<strong>CardListView</strong> – a ListView that enforces the use of a <code>CardAdapter</code> rather than any regular list adapter. Automatically sets its background to a lighter gray or darker gray based on the current theme, and handles notifying the adapter of theme changes. Has a <code>setOnCardClickListener(CardClickListener)</code> and <code>setOnCardLongClickListener(CardLongClickListener)</code> to optionally replace the standard click listeners of <code>ListView</code>.</li>
+<li>
+<strong>CardAdapter</strong> – a <code>SilkAdapter</code> that handles rendering cards for the <code>CardListView</code>, which includes the images and title/content for regular cards and the title and action for header cards. The library also provides a <code>CardCursorAdapter</code> which is the same as the regular card adapter but it sources its contents from a Cursor using the Silk library's cursor adapter implementation (discussed later).</li>
+</ol><h3>
+<a name="default-cards" class="anchor" href="#default-cards"><span class="octicon octicon-link"></span></a>Default Cards</h3>
+
+<p>There's a simple set of default card implementations that can be used without using any of your own classes or layouts. You can extend and override them as needed (which is discussed later) to customize them to your liking.</p>
+
+<ul>
+<li>
+<strong>Card</strong> – a card that displays an optional thumbnail, along with a title, content, and popup menu.</li>
+</ul><p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/card_example.png" alt="CardExample"></p>
+
+<ul>
+<li>
+<strong>CardHeader</strong> – a card that's used as a header for a section of cards. Displays a title in italics on the left, with an action button on the right. The entire header is clickable, the action is just a hint towards clickability.</li>
+</ul><p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/header_example.png" alt="CardHeaderExample"></p>
+
+<ul>
+<li>
+<strong>CardCompressed</strong> – similar to a regular card, but the title and content are displayed on the same line, with the title on the far left and content on the far right. There is no thumbnail for this card type in the default implementation.</li>
+</ul><p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/compressed_example.png" alt="CardCompressedExample"></p>
+
+<ul>
+<li>
+<strong>CardCenteredHeader</strong> – a card header that displays only a centered title. This card type is useful for displaying empty text for a section within a list (looks good when it's below a <code>CardHeader</code>).</li>
+</ul><p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/centeredheader_example.png" alt="CardCenteredHeaderExample"></p>
+
+<h1>
+<a name="code" class="anchor" href="#code"><span class="octicon octicon-link"></span></a>Code</h1>
+
+<p>If you want to use just the default Card classes, implementing Cards-UI is very, very simple. First you need a <code>CardListView</code> instance:</p>
+
+<div class="highlight highlight-java"><pre><span class="n">CardListView</span> <span class="n">list</span> <span class="o">=</span> <span class="o">...;</span> <span class="c1">// Retrieve from activity, fragment, etc.</span>
+</pre></div>
+
+<p>Optionally, you can set the theme (which is <code>Light</code> by default):</p>
+
+<div class="highlight highlight-java"><pre><span class="n">list</span><span class="o">.</span><span class="na">setCardTheme</span><span class="o">(</span><span class="n">CardTheme</span><span class="o">.</span><span class="na">Dark</span><span class="o">);</span>
+</pre></div>
+
+<p>Then you need a <code>CardAdapter</code> instance, that is set to the list:</p>
+
+<div class="highlight highlight-java"><pre><span class="c1">// The first parameter is the context, e.g. an Activity</span>
+<span class="c1">// The second parameter is the accent color used for card and header titles/actions</span>
+<span class="n">CardAdapter</span> <span class="n">adapter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CardAdapter</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">holo_blue_dark</span><span class="o">);</span>
+
+<span class="c1">// This will connect the adapter and list, sharing the theme and contents</span>
+<span class="n">list</span><span class="o">.</span><span class="na">setAdapter</span><span class="o">(</span><span class="n">adapter</span><span class="o">);</span>
+</pre></div>
+
+<h3>
+<a name="adding-cards" class="anchor" href="#adding-cards"><span class="octicon octicon-link"></span></a>Adding Cards</h3>
+
+<p>Adding cards to your list is simple:</p>
+
+<div class="highlight highlight-java"><pre><span class="c1">// Alternatively, you can pass a context and string resources in place of strings</span>
+<span class="n">CardHeader</span> <span class="n">header</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CardHeader</span><span class="o">(</span><span class="s">"I'm a header"</span><span class="o">);</span>
+<span class="c1">// You can optionally set an action to the header</span>
+<span class="c1">// Specifying no action title will default to 'See More'</span>
+<span class="n">header</span><span class="o">.</span><span class="na">setAction</span><span class="o">(</span><span class="s">"See More"</span><span class="o">,</span> <span class="k">new</span> <span class="n">CardHeader</span><span class="o">.</span><span class="na">ActionListener</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onHeaderActionClick</span><span class="o">(</span><span class="n">CardHeader</span> <span class="n">header</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// Do whatever you want</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+<span class="c1">// Add the header to the adapter, automatically notifies the list</span>
+<span class="n">adapter</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">header</span><span class="o">);</span>
+
+<span class="c1">// Again, you can pass a context and string resources in place of strings</span>
+<span class="n">Card</span> <span class="n">card</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Card</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"My name is Aidan"</span><span class="o">);</span>
+<span class="n">adapter</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">card</span><span class="o">);</span>
+</pre></div>
+
+<p>All of the other default card classes accept the same format for their constructors.</p>
+
+<h3>
+<a name="popup-menus" class="anchor" href="#popup-menus"><span class="octicon octicon-link"></span></a>Popup Menus</h3>
+
+<p>If you look at app listings in Google Play, you can see the three-dot button on the top right of cards that gives you options such as "Install" so you don't have to go into the app page before installing an it. Cards-UI makes it easy to add popup menus like that. </p>
+
+<p>There's two ways to do this: you can add a popup menu to the adapter to automatically set it to every card...</p>
+
+<div class="highlight highlight-java"><pre><span class="n">CardAdapter</span> <span class="n">adapter</span> <span class="o">=</span> <span class="o">...;</span> <span class="c1">// initialize the adapter</span>
+<span class="c1">// The menu resource is equivalent to what you use for action bar menus</span>
+<span class="n">adapter</span><span class="o">.</span><span class="na">setPopupMenu</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">menu</span><span class="o">.</span><span class="na">popupmenu_resource</span><span class="o">,</span> <span class="k">new</span> <span class="n">Card</span><span class="o">.</span><span class="na">CardMenuListener</span><span class="o">&lt;</span><span class="n">Card</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onMenuItemClick</span><span class="o">(</span><span class="n">Card</span> <span class="n">card</span><span class="o">,</span> <span class="n">MenuItem</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Do whatever you want </span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+
+<p>...or you can set popup menus to individual cards if not every card should have the same menu.</p>
+
+<div class="highlight highlight-java"><pre><span class="n">Card</span> <span class="n">card</span> <span class="o">=</span> <span class="o">...;</span> <span class="c1">// initialize the card</span>
+<span class="c1">// The menu resource is equivalent to what you use for action bar menus</span>
+<span class="n">card</span><span class="o">.</span><span class="na">setPopupMenu</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">menu</span><span class="o">.</span><span class="na">popupmenu_resource</span><span class="o">,</span> <span class="k">new</span> <span class="n">Card</span><span class="o">.</span><span class="na">CardMenuListener</span><span class="o">&lt;</span><span class="n">Card</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onMenuItemClick</span><span class="o">(</span><span class="n">Card</span> <span class="n">card</span><span class="o">,</span> <span class="n">MenuItem</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Do whatever you want </span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+
+<p>If a Card does not have a popup menu set via the adapter or the card itself, the three-dot menu icon will be hidden from the user.</p>
+        </section>
+
+        <footer>
+          Cards-UI is maintained by <a href="https://github.com/afollestad">afollestad</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
