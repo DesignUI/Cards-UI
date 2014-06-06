@@ -41,7 +41,7 @@
 <ol>
 <li>
 <strong>Silk</strong> (<a href="http://github.com/afollestad/Silk">http://github.com/afollestad/Silk</a>)</li>
-</ol><h1>
+</ol><hr><h1>
 <a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h1>
 
 <p>Cards-UI consists of two main classes, <code>CardListView</code> and <code>CardAdapter</code>. </p>
@@ -49,29 +49,30 @@
 <ol>
 <li>
 <strong>CardListView</strong> – a ListView that enforces the use of a <code>CardAdapter</code> rather than any regular list adapter. Automatically sets its background to a lighter gray or darker gray based on the current theme, and handles notifying the adapter of theme changes. Has a <code>setOnCardClickListener(CardClickListener)</code> and <code>setOnCardLongClickListener(CardLongClickListener)</code> to optionally replace the standard click listeners of <code>ListView</code>.</li>
+</ol><hr><ol>
 <li>
 <strong>CardAdapter</strong> – a <code>SilkAdapter</code> that handles rendering cards for the <code>CardListView</code>, which includes the images and title/content for regular cards and the title and action for header cards. The library also provides a <code>CardCursorAdapter</code> which is the same as the regular card adapter but it sources its contents from a Cursor using the Silk library's cursor adapter implementation (discussed later).</li>
-</ol><h3>
+</ol><hr><h3>
 <a name="default-cards" class="anchor" href="#default-cards"><span class="octicon octicon-link"></span></a>Default Cards</h3>
 
 <p>There's a simple set of default card implementations that can be used without using any of your own classes or layouts. You can extend and override them as needed (which is discussed later) to customize them to your liking.</p>
 
-<ul>
+<hr><ul>
 <li>
 <strong>Card</strong> – a card that displays an optional thumbnail, along with a title, content, and popup menu.</li>
 </ul><p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/card_example.png" alt="CardExample"></p>
 
-<ul>
+<hr><ul>
 <li>
 <strong>CardHeader</strong> – a card that's used as a header for a section of cards. Displays a title in italics on the left, with an action button on the right. The entire header is clickable, the action is just a hint towards clickability.</li>
 </ul><p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/header_example.png" alt="CardHeaderExample"></p>
 
-<ul>
+<hr><ul>
 <li>
 <strong>CardCompressed</strong> – similar to a regular card, but the title and content are displayed on the same line, with the title on the far left and content on the far right. There is no thumbnail for this card type in the default implementation.</li>
 </ul><p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/compressed_example.png" alt="CardCompressedExample"></p>
 
-<ul>
+<hr><ul>
 <li>
 <strong>CardCenteredHeader</strong> – a card header that displays only a centered title. This card type is useful for displaying empty text for a section within a list (looks good when it's below a <code>CardHeader</code>).</li>
 </ul><p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/centeredheader_example.png" alt="CardCenteredHeaderExample"></p>
@@ -99,7 +100,7 @@
 <span class="n">list</span><span class="o">.</span><span class="na">setAdapter</span><span class="o">(</span><span class="n">adapter</span><span class="o">);</span>
 </pre></div>
 
-<h3>
+<hr><h3>
 <a name="adding-cards" class="anchor" href="#adding-cards"><span class="octicon octicon-link"></span></a>Adding Cards</h3>
 
 <p>Adding cards to your list is simple:</p>
@@ -125,7 +126,7 @@
 
 <p>All of the other default card classes accept the same format for their constructors.</p>
 
-<h3>
+<hr><h3>
 <a name="popup-menus" class="anchor" href="#popup-menus"><span class="octicon octicon-link"></span></a>Popup Menus</h3>
 
 <p>If you look at app listings in Google Play, you can see the three-dot button on the top right of cards that gives you options such as "Install" so you don't have to go into the app page before installing an it. Cards-UI makes it easy to add popup menus like that. </p>
@@ -161,7 +162,7 @@
 
 <p>If you want to implement functionality that isn't provided by Cards-UI by default, you can extend its classes and layouts to whatever you need. Before you start, you should look at the layouts under <code>/res/layout</code> of Cards-UI. You'll see that each layout references styles to provide a consistent look among all the cards.</p>
 
-<h3>
+<hr><h3>
 <a name="making-a-custom-layout" class="anchor" href="#making-a-custom-layout"><span class="octicon octicon-link"></span></a>Making a Custom Layout</h3>
 
 <p>First, you'll need a custom layout file. This layout is a modified version of the default card layout:</p>
@@ -215,7 +216,7 @@
 
 <p>Now instead of adding a <code>Card</code> to your adapter, you add a <code>CustomCard</code>.</p>
 
-<h3>
+<hr><h3>
 <a name="adding-views" class="anchor" href="#adding-views"><span class="octicon octicon-link"></span></a>Adding Views</h3>
 
 <p>If you need more views in your card layout, you can add them in and manually set their contents from a custom adapter. Here's a new custom layout with additional views:</p>
