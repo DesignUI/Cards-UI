@@ -199,6 +199,23 @@
 
 <p>This custom layout takes away the singleLine behavior of the default card, and makes the maximum number of lines for the card content 3.</p>
 
+<p>You then need a custom class that extends <code>Card</code> and overrides <code>getLayout()</code> to return your custom layout:</p>
+
+<p>public class CustomCard extends Card {
+    public CustomCard(Context context, int title, int content) {
+        super(context, title, content);
+    }</p>
+
+<pre><code>public int getLayout() {
+    // Replace with your layout
+    return R.layout.custom_card;
+}
+</code></pre>
+
+<p>}</p>
+
+<p>Now instead of adding a <code>Card</code> to your adapter, you add a <code>CustomCard</code>.</p>
+
 <h3>
 <a name="adding-views" class="anchor" href="#adding-views"><span class="octicon octicon-link"></span></a>Adding Views</h3>
 
