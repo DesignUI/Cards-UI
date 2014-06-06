@@ -76,7 +76,7 @@
 <strong>CardCenteredHeader</strong> – a card header that displays only a centered title. This card type is useful for displaying empty text for a section within a list (looks good when it's below a <code>CardHeader</code>).</li>
 </ul><p><img src="https://raw.github.com/afollestad/Cards-UI/master/images/centeredheader_example.png" alt="CardCenteredHeaderExample"></p>
 
-<h1>
+<hr><h1>
 <a name="code" class="anchor" href="#code"><span class="octicon octicon-link"></span></a>Code</h1>
 
 <p>If you want to use just the default Card classes, implementing Cards-UI is very, very simple. First you need a <code>CardListView</code> instance:</p>
@@ -156,7 +156,99 @@
 
 <p>If a Card does not have a popup menu set via the adapter or the card itself, the three-dot menu icon will be hidden from the user.</p>
 
-<p>Further example can be found in the <a href="https://github.com/afollestad/Cards-UI/tree/master/sample">sample project</a> included in the library; the sample project's dependencies are <a href="https://github.com/afollestad/Cards-UI#using-the-sample">listed in the README</a> of Cards-UI.</p>
+<hr><h1>
+<a name="custom-cards-and-adapters" class="anchor" href="#custom-cards-and-adapters"><span class="octicon octicon-link"></span></a>Custom Cards and Adapters</h1>
+
+<p>If you want to implement functionality that isn't provided by Cards-UI by default, you can extend its classes and layouts to whatever you need. Before you start, you should look at the layouts under <code>/res/layout</code> of Cards-UI. You'll see that each layout references styles to provide a consistent look among all the cards.</p>
+
+<h3>
+<a name="making-a-custom-layout" class="anchor" href="#making-a-custom-layout"><span class="octicon octicon-link"></span></a>Making a Custom Layout</h3>
+
+<p>First, you'll need a custom layout file. This layout is a modified version of the default card layout:</p>
+
+<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+              <span class="na">style=</span><span class="s">"@style/card_outer_frame"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;RelativeLayout</span> <span class="na">android:id=</span><span class="s">"@android:id/widget_frame"</span>
+                    <span class="na">style=</span><span class="s">"@style/card_inner_frame"</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;ImageView</span> <span class="na">android:id=</span><span class="s">"@android:id/icon"</span> <span class="na">style=</span><span class="s">"@style/card_thumbnail"</span><span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;RelativeLayout</span> <span class="na">android:id=</span><span class="s">"@+id/titleFrame"</span> <span class="na">style=</span><span class="s">"@style/card_title_frame"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;TextView</span> <span class="na">android:id=</span><span class="s">"@android:id/title"</span> <span class="na">style=</span><span class="s">"@style/card_title"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;ImageButton</span> <span class="na">android:id=</span><span class="s">"@android:id/button1"</span> <span class="na">style=</span><span class="s">"@style/card_popup_anchor"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/RelativeLayout&gt;</span>
+
+        <span class="nt">&lt;com.afollestad.silk.views.text.SilkTextView</span> <span class="na">android:id=</span><span class="s">"@android:id/content"</span>
+                                                     <span class="na">style=</span><span class="s">"@style/card_content_custom"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;/RelativeLayout&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</pre></div>
+
+<p>The only thing I changed for this example is the style set to <code>@android:id/content</code>. Here's the style definition of <code>card_content_custom</code> inside of my styles.xml file:</p>
+
+<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;resources&gt;</span>
+    <span class="nt">&lt;style</span> <span class="na">name=</span><span class="s">"card_content_custom"</span> <span class="na">parent=</span><span class="s">"@style/card_content"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"android:singleLine"</span><span class="nt">&gt;</span>false<span class="nt">&lt;/item&gt;</span>
+        <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"android:maxLines"</span><span class="nt">&gt;</span>3<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;/style&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</pre></div>
+
+<p>This custom layout takes away the singleLine behavior of the default card, and makes the maximum number of lines for the card content 3.</p>
+
+<h3>
+<a name="adding-views" class="anchor" href="#adding-views"><span class="octicon octicon-link"></span></a>Adding Views</h3>
+
+<p>If you need more views in your card layout, you can add them in and manually set their contents from a custom adapter. Here's a new custom layout with additional views:</p>
+
+<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+              <span class="na">style=</span><span class="s">"@style/card_outer_frame"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;RelativeLayout</span> <span class="na">android:id=</span><span class="s">"@android:id/widget_frame"</span>
+                    <span class="na">style=</span><span class="s">"@style/card_inner_frame"</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;ImageView</span> <span class="na">android:id=</span><span class="s">"@android:id/icon"</span> <span class="na">style=</span><span class="s">"@style/card_thumbnail"</span><span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;RelativeLayout</span> <span class="na">android:id=</span><span class="s">"@+id/titleFrame"</span> <span class="na">style=</span><span class="s">"@style/card_title_frame"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;TextView</span> <span class="na">android:id=</span><span class="s">"@android:id/title"</span> <span class="na">style=</span><span class="s">"@style/card_title"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;ImageButton</span> <span class="na">android:id=</span><span class="s">"@android:id/button1"</span> <span class="na">style=</span><span class="s">"@style/card_popup_anchor"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/RelativeLayout&gt;</span>
+
+        <span class="nt">&lt;com.afollestad.silk.views.text.SilkTextView</span> <span class="na">android:id=</span><span class="s">"@android:id/content"</span>
+                                                     <span class="na">style=</span><span class="s">"@style/card_content"</span><span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;com.afollestad.silk.views.text.SilkTextView</span> <span class="na">android:id=</span><span class="s">"@+id/customText"</span>
+                                                     <span class="na">style=</span><span class="s">"@style/card_content"</span>
+                                                     <span class="na">android:layout_below=</span><span class="s">"@android:id/content"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;/RelativeLayout&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</pre></div>
+
+<p>You'll need a custom adapter in order to fill the contents of this new TextView. Just create a new class that extends <code>CardAdapter</code>:</p>
+
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomAdapter</span> <span class="kd">extends</span> <span class="n">CardAdapter</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">CustomAdapter</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="kt">int</span> <span class="n">accentColorRes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">accentColorRes</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">View</span> <span class="nf">onViewCreated</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="n">View</span> <span class="n">recycled</span><span class="o">,</span> <span class="n">CardBase</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">View</span> <span class="n">view</span> <span class="o">=</span> <span class="kd">super</span><span class="o">.</span><span class="na">onViewCreated</span><span class="o">(</span><span class="n">index</span><span class="o">,</span> <span class="n">recycled</span><span class="o">,</span> <span class="n">item</span><span class="o">);</span>
+        <span class="n">TextView</span> <span class="n">customText</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span> <span class="n">view</span><span class="o">.</span><span class="na">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">customText</span><span class="o">);</span>
+        <span class="n">customText</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">"Hello, I'm a custom view"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">view</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>Notice that it overrides <code>onViewCreated</code> and sets the text for the custom view. Other methods of CardAdapter that can be overrided include <code>onProcessThumbnail</code>, <code>onProcessTitle</code>, <code>onProcessContent</code>, and <code>onProcessMenu</code> (along with the methods included in <code>SilkAdapter</code>).</p>
+
+<hr><p>Further example can be found in the <a href="https://github.com/afollestad/Cards-UI/tree/master/sample">sample project</a> included in the library; the sample project's dependencies are <a href="https://github.com/afollestad/Cards-UI#using-the-sample">listed in the README</a> of Cards-UI.</p>
         </section>
 
         <footer>
