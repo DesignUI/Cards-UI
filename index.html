@@ -201,18 +201,17 @@
 
 <p>You then need a custom class that extends <code>Card</code> and overrides <code>getLayout()</code> to return your custom layout:</p>
 
-<p>public class CustomCard extends Card {
-    public CustomCard(Context context, int title, int content) {
-        super(context, title, content);
-    }</p>
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomCard</span> <span class="kd">extends</span> <span class="n">Card</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">CustomCard</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="kt">int</span> <span class="n">title</span><span class="o">,</span> <span class="kt">int</span> <span class="n">content</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">title</span><span class="o">,</span> <span class="n">content</span><span class="o">);</span>
+    <span class="o">}</span>
 
-<pre><code>public int getLayout() {
-    // Replace with your layout
-    return R.layout.custom_card;
-}
-</code></pre>
-
-<p>}</p>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getLayout</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Replace with your layout</span>
+        <span class="k">return</span> <span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">custom_card</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
 
 <p>Now instead of adding a <code>Card</code> to your adapter, you add a <code>CustomCard</code>.</p>
 
