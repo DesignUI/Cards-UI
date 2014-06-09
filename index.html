@@ -265,6 +265,8 @@
 
 <p>Notice that it overrides <code>onViewCreated</code> and sets the text for the custom view. Other methods of CardAdapter that can be overrided include <code>onProcessThumbnail</code>, <code>onProcessTitle</code>, <code>onProcessContent</code>, and <code>onProcessMenu</code> (along with the methods included in <code>SilkAdapter</code>).</p>
 
+<p><code>onViewCreated</code> is inherited from <code>SilkAdapter</code>, it's equivalent to <code>getView</code> of the stock <code>BaseAdapter</code> class but it automatically handles view recycling for you. <code>onViewCreated</code> is called for every item in your list, including headers and other items that may not be an instance of <code>Card</code>. Ways to check this are by checking the return value of <code>item.isHeader()</code> or <code>item instanceof Card</code>. In this example above, we just check if the custom <code>TextView</code> is null or not.</p>
+
 <hr><p>Further example can be found in the <a href="https://github.com/afollestad/Cards-UI/tree/master/sample">sample project</a> included in the library; the sample project's dependencies are <a href="https://github.com/afollestad/Cards-UI#using-the-sample">listed in the README</a> of Cards-UI.</p>
         </section>
 
