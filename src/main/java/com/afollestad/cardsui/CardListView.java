@@ -105,6 +105,7 @@ public class CardListView extends ListView implements AdapterView.OnItemClickLis
      */
     public void setAdapter(CardAdapter adapter) {
         super.setAdapter(adapter);
+        adapter.onListAttached(this);
     }
 
     /**
@@ -112,6 +113,7 @@ public class CardListView extends ListView implements AdapterView.OnItemClickLis
      */
     public void setAdapter(CardCursorAdapter adapter) {
         super.setAdapter(adapter);
+        adapter.onListAttached(this);
     }
 
     /**
